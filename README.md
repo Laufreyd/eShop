@@ -4,7 +4,7 @@ eShop - MG
 ## Install
 
 ```
-git clone https://github.com/IIA-E2-2018/eShop-MG.git
+git clone https://github.com/Laufreyd/eShop.git
 gradle eclipse
 ```
 
