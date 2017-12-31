@@ -18,11 +18,13 @@
       </thead>
       <tbody>
       <#list products as product>
-      <tr>
-        <th scope="row"><a href="/product/${product.id}">${product.name}</a></th>
-        <td>${product.quantity}</td>
-        <td>${product.price}</td>
-      </tr>
+      	<#if (product.endOfLife?c) == "false">
+	      <tr>
+	        <th scope="row"><a href="/product/${product.id}">${product.name}</a></th>
+	        <td>${product.quantity}</td>
+	        <td>${product.price}</td>
+	      </tr>
+      	</#if>
       </#list>
       </tbody>
     </table>
