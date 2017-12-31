@@ -2,7 +2,7 @@
 <@mp.page title="Show list">
 
   <h1>PROFIL de ${account.firstName} ${account.lastName}</h1>
-  <a href="/">My orders</a>
+  <a href="/order/list">My orders</a>
   
 	<form action="modification" method="post">
         First name:

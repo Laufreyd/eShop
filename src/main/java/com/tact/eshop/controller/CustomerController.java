@@ -63,7 +63,7 @@ public class CustomerController {
 		
 		if(!customerFocused.isEmpty()) {
 			session.setAttribute("account", customerFocused.get(0));
-			return "redirect:/user/profil";
+			return "redirect:/";
 		}
 		else{
 			model.addAttribute("error", "Aucune personne de ce nom n'est inscrite sur notre site");
