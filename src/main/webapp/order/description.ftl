@@ -8,5 +8,6 @@
 		${product.getProduct().name}
 	
 	</#list>
+	${order.customer.id}
 
 </@mp.page>

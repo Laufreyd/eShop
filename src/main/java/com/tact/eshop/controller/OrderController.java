@@ -49,12 +49,29 @@ public class OrderController {
 	}
 	
 	@RequestMapping("{id}")
-	public String description(@PathVariable String id, Model model) {
+	public String description(@PathVariable String id, HttpSession session, Model model) {
+		
+		String returnString;
 		
 		Order order = oRepo.findOne(Long.valueOf(id));
-		model.addAttribute("order", order);
 		
-		return "order/description";
+		if(session.getAttribute("account") != null) {
+			Customer currentCustomer = (Customer) session.getAttribute("account");
+			
+			if(currentCustomer.getId() == order.getCustomer().getId()) {
+				model.addAttribute("order", order);
+				
+				returnString = "order/description";
+			}
+			else {
+				returnString = "redirect:/order/list";
+			}
+		}
+		else {
+			returnString = "redirect:/";
+		}
+		
+		return returnString;
 	}
 
 }

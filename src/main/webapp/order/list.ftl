@@ -1,7 +1,7 @@
 <#import "../masterpage.ftl" as mp />
 <@mp.page title="Show list">
 
-  <h1>LIST OF ORDERS??</h1>
+  <h1>LIST OF ORDERS</h1>
   
 
   <#list orders as order>
@@ -12,7 +12,7 @@
   	<#if (order.total)??>
   	${order.total} euros
   	<#else>
-  	0 euros
+  	//TODO When total null
   	</#if></p>
   	</a>
   </#list>
