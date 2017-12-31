@@ -1,5 +1,7 @@
 package com.tact.eshop.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,9 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class RootController {
 	
-	@RequestMapping("")
+	@RequestMapping({"", "index", "home"})
 	public String index() {
-
 		return "root/home";
 	}
 

@@ -17,7 +17,7 @@
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark <!--fixed-top-->">
       <a class="navbar-brand" href="/">E-Commerce</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse"
+      <!-- <button class="navbar-toggler" type="button" data-toggle="collapse"
         data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -47,13 +47,16 @@
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" placeholder="Search"
-            aria-label="Search" type="text">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-      </div>
+        </ul> -->
+        <div>
+        	<#if (account)??>
+        		Bienvenue <a href="/user/profil">${account.firstName}</a>
+        		<button><a href="/user/disconnexion">Deconnexion</a></button>
+        	<#else>
+        		<button><a href="/user/connexion">Connexion</a></button> <!-- TODO connexion page -->
+        	</#if>
+        </div>
+      <!-- </div> -->
     </nav>
 
     <main role="main" class="container">
