@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 @RequestMapping("/user/")
-public class UserController {
+public class CustomerController {
 	
 	@Autowired
 	private CustomerRepository cRepo;
@@ -62,13 +62,30 @@ public class UserController {
 		}
 		
 		if(!customerFocused.isEmpty()) {
-			session.setAttribute("account", customer);
+			session.setAttribute("account", customerFocused.get(0));
 			return "redirect:/user/profil";
 		}
 		else{
 			model.addAttribute("error", "Aucune personne de ce nom n'est inscrite sur notre site");
 			return "/user/connexion";
 		}
+	}
+	
+	@PostMapping("modification")
+	public String modification(Customer customer, HttpSession session) {
+		Customer newCustomer = (Customer) session.getAttribute("account");
+		
+		newCustomer.setFirstName(customer.getFirstName());
+		newCustomer.setLastName(customer.getLastName());
+		newCustomer.setAddress(customer.getAddress());
+		newCustomer.setCity(customer.getCity());
+		newCustomer.setPhone(customer.getPhone());
+		newCustomer.setZip(customer.getZip());
+		
+		cRepo.save(newCustomer);
+		session.setAttribute("account", newCustomer);
+		
+		return "/user/profil";
 	}
 
 }
