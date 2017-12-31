@@ -29,11 +29,17 @@ public class ProductController {
 
     @RequestMapping("{id}")
     public String show(@PathVariable String id, Model model) {
-
+    	String returnString;
         Product product = productRepo.findOne(Long.valueOf(id));
-        model.addAttribute("product", product);
-
-        return "product/show";
+        
+        if(product.getEndOfLife() == false) {
+            model.addAttribute("product", product);
+            returnString = "product/show";
+        }
+        else {
+        	returnString = "redirect:/product/index";
+        }
+        return returnString;
     }
 
 }

@@ -53,7 +53,7 @@
         		Bienvenue <a href="/user/profil">${account.firstName}</a>
         		<button><a href="/user/disconnexion">Deconnexion</a></button>
         	<#else>
-        		<button><a href="/user/connexion">Connexion</a></button> <!-- TODO connexion page -->
+        		<button><a href="/user/connexion">Connexion</a></button>
         	</#if>
         </div>
       <!-- </div> -->
