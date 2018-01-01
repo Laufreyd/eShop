@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tact.eshop.entity.Customer;
 import com.tact.eshop.entity.Order;
+import com.tact.eshop.entity.OrderProduct;
 import com.tact.eshop.entity.Product;
 import com.tact.eshop.repository.CustomerRepository;
 import com.tact.eshop.repository.OrderRepository;
@@ -135,6 +136,59 @@ public class OrderController {
 			}
 		}
 		
+		return returnString;
+	}
+	
+	@RequestMapping("remove/{id}")
+	public String removeProductToChart(@PathVariable String id, HttpSession session, Model model) {
+		String returnString = "redirect:/order/{id}";
+		
+		if(session.getAttribute("account") != null) {
+			
+			Customer currentCustomer = (Customer) session.getAttribute("account");
+			currentCustomer = cRepo.findOne(currentCustomer.getId());
+			if(session.getAttribute("currentOrder") == null) {
+				
+				List<Order> ordersCustomer = currentCustomer.getOrders();
+
+				if(ordersCustomer.size() == 0) {
+					Order order = new Order();
+					currentCustomer.addOrder(order);
+					oRepo.save(order);
+					session.setAttribute("currentOrder", order);
+				}
+				else {
+					
+					ArrayList<Order> allOrders = new ArrayList<Order>();
+					
+					for(Order orderInList : ordersCustomer) {
+						if(orderInList.getFinished() == false) {
+							allOrders.add(orderInList);
+						}
+					}
+					
+					if(allOrders.size() == 1) {
+						session.setAttribute("currentOrder", ordersCustomer.get(0));
+					}
+					else {
+						session.setAttribute("account", null);
+						model.addAttribute("error", "An error was occur, please connect again<br>If the problem, contact support system");
+						returnString = "/user/connexion";
+					}
+				}
+			}
+			
+			if(session.getAttribute("currentOrder") != null) {
+				Product productToErase = pRepo.findOne(Long.valueOf(id));
+								
+				Order newOrder = (Order) session.getAttribute("currentOrder");
+				
+				newOrder.removeProduct(productToErase, 1);
+								
+				oRepo.save(newOrder);
+				
+			}
+		}
 		return returnString;
 	}
 

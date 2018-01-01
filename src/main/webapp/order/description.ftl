@@ -3,11 +3,14 @@
 
   <h1>DESCRIPTION</h1>
   
-	<#list order.getOrderedProduct() as product>
-	
-		${product.getProduct().name}
-	
+	<#list order.getOrderedProduct() as orderProduct>
+		<#if (orderProduct.quantity > 0)>
+		${orderProduct.getProduct().name}
+		${orderProduct.quantity}
+		<#if (orderProduct.getOrder().finished?c) == "false">
+			<button><a href="/order/remove/${orderProduct.id}">Erase</a></button>
+		</#if>
+		</#if>
 	</#list>
-	${order.customer.id}
 
 </@mp.page>

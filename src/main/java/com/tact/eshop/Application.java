@@ -49,6 +49,7 @@ public class Application {
             repoCutomer.save(new Customer("Michelle", "Dessler"));
 
             Product product = new Product("Bmx");
+            product.setQuantity(5);
 
             // Add products.
             log.info("Add Products fixtures...");
