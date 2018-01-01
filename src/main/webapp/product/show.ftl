@@ -12,10 +12,18 @@
     </p>
     <p>${product.price}</p>
     <p>${product.quantity} left</p>
+    
     <#if (product.quantity) == 0>
     	Sorry, you  can't add this product to chart (Out of stock)
+    <#elseif (account)??>
+    	<button><a href="/order/add/${product.id}">Add to chart</a></button>
     <#else>
-    	<button>Add to chart</button>
+    	Be connect to be able to buy this article
     </#if>
+    
+    <#if (order)??>
+    	<p>${order.id}</p>
+    </#if>
+    
   </div>
 </@mp.page>

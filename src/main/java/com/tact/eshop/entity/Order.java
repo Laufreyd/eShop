@@ -16,7 +16,10 @@ import javax.persistence.Table;
 public class Order extends EntityBase {
 
     @Column
-    private Float total;
+    private Float total = 0f;
+    
+    @Column
+    private Boolean finished = false;
 
     @ManyToOne
     private Customer customer;
@@ -56,9 +59,44 @@ public class Order extends EntityBase {
         return this.total;
     }
 
-    public Order addProduct(Product product, int qt) {
-        OrderProduct item = new OrderProduct(this, product, qt);
-        this.products.add(item);
+    /**
+     * @return the boolean who says if the order is close or not
+     */
+    public Boolean getFinished() {
+		return this.finished;
+	}
+
+    /**
+     * @param finished The boolean
+     * @return Order
+     */
+	public Order setFinished(Boolean finished) {
+		this.finished = finished;
+		
+		return this;
+	}
+	
+	public Order addProduct(Product product, int qt) {
+		
+		OrderProduct item = null;
+		
+		for(OrderProduct orderproduct : this.getOrderedProduct()) {
+			if(orderproduct.getProduct().getId() == product.getId()) {
+				item = orderproduct; 
+				break;
+			}
+		}
+		
+		if(item == null) {
+			item = new OrderProduct(this, product, qt);
+			this.products.add(item);
+		}
+		else {
+			item.setQuantity(item.getQuantity() + qt);
+		}
+		
+        this.total += product.getPrice() * qt;
+        product.setQuantity(product.getQuantity() - 1);
 
         return this;
     }
@@ -79,6 +117,8 @@ public class Order extends EntityBase {
         if (finded.getQuantity() <= 0) {
             this.products.remove(finded);
         }
+        
+        this.total -= product.getPrice() * qt;
     }
 
 }
