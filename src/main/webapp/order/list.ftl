@@ -4,17 +4,22 @@
   <h1>LIST OF ORDERS</h1>
   
 	
-	  <#list orders as order><#if (order.getTotal() > 0)>
+	  <#list orders as order>
 	  
-	  	<a href="/order/${order.id}">
-	  	<p>${order.createdAt}
-	  	${order.getOrderedProduct()?size} Differents products
-	  	<#if (order.total)??>
-	  	${order.total} euros
-	  	<#else>
-	  	//TODO When total null
-	  	</#if></p>
-	  	</a></#if>
+	  	<#if (order.getOrderedProduct()?size > 0)>
+	  	
+		  	<a href="/order/${order.id}">
+		  	<p>${order.createdAt}
+		  	${order.getOrderedProduct()?size} Differents products
+		  	<#if (order.total)??>
+		  	${order.total} euros
+		  	<#else>
+		  	//TODO When total null
+		  	</#if></p>
+		  	</a>
+		  	
+	  	</#if>
+	  	
 	  </#list>
   
 </@mp.page>
