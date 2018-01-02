@@ -76,27 +76,18 @@ public class Order extends EntityBase {
 		return this;
 	}
 	
+	public Order setTotal(Float f) {
+		this.total = f;
+		return this;
+	}
+	
 	public Order addProduct(Product product, int qt) {
 		
-		OrderProduct item = null;
-		
-		for(OrderProduct orderproduct : this.getOrderedProduct()) {
-			if(orderproduct.getProduct().getId() == product.getId()) {
-				item = orderproduct; 
-				break;
-			}
-		}
-		
-		if(item == null) {
-			item = new OrderProduct(this, product, qt);
-			this.products.add(item);
-		}
-		else {
-			item.setQuantity(item.getQuantity() + qt);
-		}
-		
+		OrderProduct item = new OrderProduct(this, product, qt);
+        this.products.add(item);
+        
         this.total += product.getPrice() * qt;
-        product.setQuantity(product.getQuantity() - qt);
+        product.setQuantity(product.getQuantity() - 1);
 
         return this;
     }

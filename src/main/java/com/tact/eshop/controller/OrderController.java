@@ -16,6 +16,7 @@ import com.tact.eshop.entity.Order;
 import com.tact.eshop.entity.OrderProduct;
 import com.tact.eshop.entity.Product;
 import com.tact.eshop.repository.CustomerRepository;
+import com.tact.eshop.repository.OrderProductRepository;
 import com.tact.eshop.repository.OrderRepository;
 import com.tact.eshop.repository.ProductRepository;
 
@@ -32,6 +33,9 @@ public class OrderController {
 	
 	@Autowired
 	private ProductRepository pRepo;
+	
+	@Autowired
+	private OrderProductRepository opRepo;
 	
 	@RequestMapping("list")
 	public String list(HttpSession session, Model model) {
@@ -129,8 +133,26 @@ public class OrderController {
 				if(productToAdd.getEndOfLife() == false) {					
 					Order newOrder = (Order) session.getAttribute("currentOrder");
 					
-					newOrder.addProduct(productToAdd, 1);
+					Boolean check = false;
+					OrderProduct newOrderProduct = new OrderProduct(newOrder, productToAdd, 1);
 					
+					for(OrderProduct orderProduct : newOrder.getOrderedProduct()) {
+						if(orderProduct.getId() == productToAdd.getId()) {
+							orderProduct.setQuantity(orderProduct.getQuantity() + 1);
+							productToAdd.setQuantity(productToAdd.getQuantity() - 1);
+							newOrder.setTotal(newOrder.getTotal() + productToAdd.getPrice());
+							newOrderProduct = orderProduct;
+							check = true;
+							break;
+						}
+					}
+					
+					if(!check) {
+						newOrder.addProduct(productToAdd, 1);
+						newOrderProduct = newOrder.getOrderedProduct().get(newOrder.getOrderedProduct().size() - 1);
+					}
+					
+					opRepo.save(newOrderProduct);
 					oRepo.save(newOrder);
 				}
 			}
