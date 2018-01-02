@@ -3,8 +3,7 @@
 
   <h1>LIST OF ORDERS</h1>
   
-	
-	  <#list orders as order>
+	  <#list orders?reverse as order>
 	  
 	  	<#if (order.getOrderedProduct()?size > 0)>
 	  	

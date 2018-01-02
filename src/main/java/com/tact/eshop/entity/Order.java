@@ -19,9 +19,6 @@ import com.tact.eshop.Application;
 @Entity
 @Table(name="shop_order")
 public class Order extends EntityBase {
-
-	private static final Logger log =
-            LoggerFactory.getLogger(Application.class);
 	
     @Column
     private Float total = 0f;

@@ -69,6 +69,7 @@ public class Application {
             order.addProduct(product, 1);
             order.addProduct(product1, 3);
             order.addProduct(product2, 3);
+            order.setFinished(true);
             repoOrder.save(order);
 
             int i = 0;

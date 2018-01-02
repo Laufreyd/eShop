@@ -27,9 +27,8 @@ import com.tact.eshop.repository.ProductRepository;
 @Controller
 @RequestMapping("/order/")
 public class OrderController {
-	private static final Logger log =
-            LoggerFactory.getLogger(Application.class);
-
+	 private static final Logger log =
+	            LoggerFactory.getLogger(Application.class);
 	@Autowired
 	private OrderRepository oRepo;
 	
@@ -105,32 +104,32 @@ public class OrderController {
 			if(session.getAttribute("currentOrder") == null) {
 				
 				List<Order> ordersCustomer = currentCustomer.getOrders();
+				
+				ArrayList<Order> allOrders = new ArrayList<Order>();
 
-				if(ordersCustomer.size() == 0) {
+				for(Order orderInList : ordersCustomer) {
+					if(orderInList.getFinished() == false) {
+						allOrders.add(orderInList);
+					}
+				}
+				
+				switch (allOrders.size()) {
+				case 0:
 					Order order = new Order();
 					currentCustomer.addOrder(order);
 					oRepo.save(order);
 					session.setAttribute("currentOrder", order);
+					break;
+				case 1:
+					session.setAttribute("currentOrder", ordersCustomer.get(0));
+					break;
+				default:
+					session.setAttribute("account", null);
+					model.addAttribute("error", "An error was occur, please connect again<br>If the problem, contact support system");
+					returnString = "/user/connexion";
+					break;
 				}
-				else {
-					
-					ArrayList<Order> allOrders = new ArrayList<Order>();
-					
-					for(Order orderInList : ordersCustomer) {
-						if(orderInList.getFinished() == false) {
-							allOrders.add(orderInList);
-						}
-					}
-					
-					if(allOrders.size() == 1) {
-						session.setAttribute("currentOrder", ordersCustomer.get(0));
-					}
-					else {
-						session.setAttribute("account", null);
-						model.addAttribute("error", "An error was occur, please connect again<br>If the problem, contact support system");
-						returnString = "/user/connexion";
-					}
-				}
+				
 			}
 			
 			if(session.getAttribute("currentOrder") != null) {
@@ -177,46 +176,47 @@ public class OrderController {
 			if(session.getAttribute("currentOrder") == null) {
 				
 				List<Order> ordersCustomer = currentCustomer.getOrders();
+				
+				ArrayList<Order> allOrders = new ArrayList<Order>();
 
-				if(ordersCustomer.size() == 0) {
+				for(Order orderInList : ordersCustomer) {
+					if(orderInList.getFinished() == false) {
+						allOrders.add(orderInList);
+					}
+				}
+				
+				switch (allOrders.size()) {
+				case 0:
 					Order order = new Order();
 					currentCustomer.addOrder(order);
 					oRepo.save(order);
 					session.setAttribute("currentOrder", order);
+					break;
+				case 1:
+					session.setAttribute("currentOrder", ordersCustomer.get(0));
+					break;
+				default:
+					session.setAttribute("account", null);
+					model.addAttribute("error", "An error was occur, please connect again<br>If the problem, contact support system");
+					returnString = "/user/connexion";
+					break;
 				}
-				else {
-					
-					ArrayList<Order> allOrders = new ArrayList<Order>();
-					
-					for(Order orderInList : ordersCustomer) {
-						if(orderInList.getFinished() == false) {
-							allOrders.add(orderInList);
-						}
-					}
-					
-					if(allOrders.size() == 1) {
-						session.setAttribute("currentOrder", ordersCustomer.get(0));
-					}
-					else {
-						session.setAttribute("account", null);
-						model.addAttribute("error", "An error was occur, please connect again<br>If the problem, contact support system");
-						returnString = "/user/connexion";
-					}
-				}
+				
 			}
 			
 			if(session.getAttribute("currentOrder") != null) {
-				Product productToErase = pRepo.findOne(Long.valueOf(id));
-								
 				Order newOrder = (Order) session.getAttribute("currentOrder");
+
+				Product productToErase = pRepo.findOne(Long.valueOf(opRepo.findOne(Long.valueOf(id)).getProduct().getId()));
 				
 				for(OrderProduct orderProduct : newOrder.getOrderedProduct()) {
+					log.info(String.valueOf(orderProduct.getProduct().getId()));
+					log.info(String.valueOf(String.valueOf(productToErase.getId())));
 					if(orderProduct.getProduct().getId() == productToErase.getId()) {
 						newOrder.removeProduct(productToErase, 1);
 						oRepo.save(newOrder);
 
 						if(orderProduct.getQuantity() == 0) {
-							log.info("quantity null");
 							opRepo.delete(orderProduct.getId());
 							if(newOrder.getOrderedProduct().isEmpty()) {
 								oRepo.delete(newOrder.getId());
@@ -225,7 +225,6 @@ public class OrderController {
 							session.setAttribute("currentOrder", null);
 						}
 						else {
-							log.info("quantity not null");
 							opRepo.save(orderProduct);
 						}
 
