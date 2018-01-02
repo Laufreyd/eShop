@@ -14,7 +14,6 @@
 		  	<#if (order.total)??>
 		  	${order.total} euros
 		  	<#else>
-		  	//TODO When total null
 		  	</#if></p>
 		  	</a>
 		  	

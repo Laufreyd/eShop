@@ -10,11 +10,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.tact.eshop.Application;
+
 /** Class for Order POJO of eShop project. */
 @Entity
 @Table(name="shop_order")
 public class Order extends EntityBase {
 
+	private static final Logger log =
+            LoggerFactory.getLogger(Application.class);
+	
     @Column
     private Float total = 0f;
     
@@ -112,9 +120,7 @@ public class Order extends EntityBase {
         }
     
         product.setQuantity(product.getQuantity() + qt);
-        this.total -= product.getPrice() * qt;
-        
-        
+        this.total -= product.getPrice() * qt;        
     }
 
 }

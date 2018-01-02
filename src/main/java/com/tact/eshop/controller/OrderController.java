@@ -143,12 +143,13 @@ public class OrderController {
 					OrderProduct newOrderProduct = new OrderProduct(newOrder, productToAdd, 1);
 					
 					for(OrderProduct orderProduct : newOrder.getOrderedProduct()) {
-						if(orderProduct.getId() == productToAdd.getId()) {
+						if(orderProduct.getProduct().getId() == productToAdd.getId()) {
 							orderProduct.setQuantity(orderProduct.getQuantity() + 1);
 							productToAdd.setQuantity(productToAdd.getQuantity() - 1);
 							newOrder.setTotal(newOrder.getTotal() + productToAdd.getPrice());
-							newOrderProduct = orderProduct;
 							check = true;
+							opRepo.save(orderProduct);
+							oRepo.save(newOrder);
 							break;
 						}
 					}
@@ -156,10 +157,9 @@ public class OrderController {
 					if(!check) {
 						newOrder.addProduct(productToAdd, 1);
 						newOrderProduct = newOrder.getOrderedProduct().get(newOrder.getOrderedProduct().size() - 1);
+						opRepo.save(newOrderProduct);
 					}
 					
-					opRepo.save(newOrderProduct);
-					oRepo.save(newOrder);
 				}
 			}
 		}
@@ -170,7 +170,6 @@ public class OrderController {
 	@RequestMapping("remove/{id}")
 	public String removeProductToChart(@PathVariable String id, HttpSession session, Model model) {
 		String returnString = "redirect:/order/list";
-		
 		if(session.getAttribute("account") != null) {
 			
 			Customer currentCustomer = (Customer) session.getAttribute("account");
@@ -212,16 +211,24 @@ public class OrderController {
 				Order newOrder = (Order) session.getAttribute("currentOrder");
 				
 				for(OrderProduct orderProduct : newOrder.getOrderedProduct()) {
-					if(orderProduct.getId() == productToErase.getId()) {
+					if(orderProduct.getProduct().getId() == productToErase.getId()) {
 						newOrder.removeProduct(productToErase, 1);
+						oRepo.save(newOrder);
 
 						if(orderProduct.getQuantity() == 0) {
+							log.info("quantity null");
 							opRepo.delete(orderProduct.getId());
+							if(newOrder.getOrderedProduct().isEmpty()) {
+								oRepo.delete(newOrder.getId());
+							}
+								
+							session.setAttribute("currentOrder", null);
 						}
 						else {
+							log.info("quantity not null");
 							opRepo.save(orderProduct);
 						}
-						
+
 						break;
 					}
 				}
