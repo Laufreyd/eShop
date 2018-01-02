@@ -135,7 +135,7 @@ public class OrderController {
 			if(session.getAttribute("currentOrder") != null) {
 				Product productToAdd = pRepo.findOne(Long.valueOf(id));
 				
-				if(productToAdd.getEndOfLife() == false) {					
+				if(productToAdd.getEndOfLife() == false && productToAdd.getQuantity() > 0) {					
 					Order newOrder = (Order) session.getAttribute("currentOrder");
 					
 					Boolean check = false;
