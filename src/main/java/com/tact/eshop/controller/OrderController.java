@@ -214,13 +214,10 @@ public class OrderController {
 				for(OrderProduct orderProduct : newOrder.getOrderedProduct()) {
 					if(orderProduct.getId() == productToErase.getId()) {
 						newOrder.removeProduct(productToErase, 1);
-						OrderProduct newOrderProduct = orderProduct;
-						if(newOrderProduct.getQuantity() == 0) {
-							opRepo.delete(newOrderProduct);
-						}
-						else {
-							opRepo.save(newOrderProduct);
-						}
+						log.info(String.valueOf(orderProduct.getId()));
+						
+							opRepo.save(orderProduct);
+						
 						break;
 					}
 				}
