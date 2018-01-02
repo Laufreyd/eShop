@@ -54,12 +54,21 @@ public class Application {
             // Add products.
             log.info("Add Products fixtures...");
             repoProduct.save(product);
-            repoProduct.save(new Product("T20"));
-            repoProduct.save(new Product("Voltic"));
+            
+            Product product1 = new Product("T20");
+            product1.setQuantity(5);
+            
+            Product product2 = new Product("Voltic");
+            product2.setQuantity(5);
+            
+            repoProduct.save(product1);
+            repoProduct.save(product2);
             repoProduct.save(new Product("Rhino"));
             repoProduct.save(new Product("Mule"));
 
             order.addProduct(product, 1);
+            order.addProduct(product1, 3);
+            order.addProduct(product2, 3);
             repoOrder.save(order);
 
             int i = 0;

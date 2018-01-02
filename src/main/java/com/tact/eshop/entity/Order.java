@@ -87,7 +87,7 @@ public class Order extends EntityBase {
         this.products.add(item);
         
         this.total += product.getPrice() * qt;
-        product.setQuantity(product.getQuantity() - 1);
+        product.setQuantity(product.getQuantity() - qt);
 
         return this;
     }
@@ -97,21 +97,24 @@ public class Order extends EntityBase {
     }
 
     public void removeProduct(Product product, int qt) {
-        OrderProduct finded = null;
+    	
+    	OrderProduct finded = null;
         for (OrderProduct orderProduct : this.products) {
-            if (orderProduct.getProduct().equals(product)) {
+            if (orderProduct.getProduct().getId() == product.getId()) {
                 finded = orderProduct;
             }
         }
 
-        if(finded != null) {
-        	finded.setQuantity(finded.getQuantity() - qt);
-            if (finded.getQuantity() <= 0) {
-                this.products.remove(finded);
-            }
-            product.setQuantity(product.getQuantity() + qt);
-            this.total -= product.getPrice() * qt;
+        
+        finded.setQuantity(finded.getQuantity() - qt);
+        if (finded.getQuantity() <= 0) {
+            this.products.remove(finded);
         }
+    
+        
+        product.setQuantity(product.getQuantity() + qt);
+        this.total -= product.getPrice() * qt;
+        
         
     }
 

@@ -5,12 +5,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.tact.eshop.Application;
 import com.tact.eshop.entity.Customer;
 import com.tact.eshop.entity.Order;
 import com.tact.eshop.entity.OrderProduct;
@@ -24,7 +27,9 @@ import com.tact.eshop.repository.ProductRepository;
 @Controller
 @RequestMapping("/order/")
 public class OrderController {
-	
+	private static final Logger log =
+            LoggerFactory.getLogger(Application.class);
+
 	@Autowired
 	private OrderRepository oRepo;
 	
@@ -163,7 +168,7 @@ public class OrderController {
 	
 	@RequestMapping("remove/{id}")
 	public String removeProductToChart(@PathVariable String id, HttpSession session, Model model) {
-		String returnString = "redirect:/order/{id}";
+		String returnString = "redirect:/order/list";
 		
 		if(session.getAttribute("account") != null) {
 			
@@ -205,8 +210,21 @@ public class OrderController {
 								
 				Order newOrder = (Order) session.getAttribute("currentOrder");
 				
-				newOrder.removeProduct(productToErase, 1);
-								
+				
+				for(OrderProduct orderProduct : newOrder.getOrderedProduct()) {
+					if(orderProduct.getId() == productToErase.getId()) {
+						newOrder.removeProduct(productToErase, 1);
+						OrderProduct newOrderProduct = orderProduct;
+						if(newOrderProduct.getQuantity() == 0) {
+							opRepo.delete(newOrderProduct);
+						}
+						else {
+							opRepo.save(newOrderProduct);
+						}
+						break;
+					}
+				}
+												
 				oRepo.save(newOrder);
 				
 			}
