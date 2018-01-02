@@ -58,6 +58,7 @@ public class OrderController {
 			}
 			
 			model.addAttribute("orders", ordersOfCustomer);
+			
 			returnString = "/order/list";
 		}
 		else {
@@ -210,20 +211,20 @@ public class OrderController {
 								
 				Order newOrder = (Order) session.getAttribute("currentOrder");
 				
-				
 				for(OrderProduct orderProduct : newOrder.getOrderedProduct()) {
 					if(orderProduct.getId() == productToErase.getId()) {
 						newOrder.removeProduct(productToErase, 1);
-						log.info(String.valueOf(orderProduct.getId()));
-						
+
+						if(orderProduct.getQuantity() == 0) {
+							opRepo.delete(orderProduct.getId());
+						}
+						else {
 							opRepo.save(orderProduct);
+						}
 						
 						break;
 					}
 				}
-												
-				oRepo.save(newOrder);
-				
 			}
 		}
 		return returnString;

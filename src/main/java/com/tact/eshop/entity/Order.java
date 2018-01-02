@@ -111,7 +111,6 @@ public class Order extends EntityBase {
             this.products.remove(finded);
         }
     
-        
         product.setQuantity(product.getQuantity() + qt);
         this.total -= product.getPrice() * qt;
         
