@@ -156,7 +156,7 @@ public class OrderController {
 					}
 					
 					if(!check) {
-						newOrder.addProduct(productToAdd, 1);
+						newOrder.addProduct(productToAdd, quantity);
 						newOrderProduct = newOrder.getOrderedProduct().get(newOrder.getOrderedProduct().size() - 1);
 						opRepo.save(newOrderProduct);
 					}
@@ -168,8 +168,8 @@ public class OrderController {
 		return returnString;
 	}
 	
-	@RequestMapping("remove/{id}")
-	public String removeProductToChart(@PathVariable String id, HttpSession session, Model model) {
+	@PostMapping("remove/{id}")
+	public String removeProductToChart(OrderProduct qt, @PathVariable String id, HttpSession session, Model model) {
 		String returnString = "redirect:/order/list";
 		if(session.getAttribute("account") != null) {
 			
@@ -212,10 +212,8 @@ public class OrderController {
 				Product productToErase = pRepo.findOne(Long.valueOf(opRepo.findOne(Long.valueOf(id)).getProduct().getId()));
 				
 				for(OrderProduct orderProduct : newOrder.getOrderedProduct()) {
-					log.info(String.valueOf(orderProduct.getProduct().getId()));
-					log.info(String.valueOf(String.valueOf(productToErase.getId())));
 					if(orderProduct.getProduct().getId() == productToErase.getId()) {
-						newOrder.removeProduct(productToErase, 1);
+						newOrder.removeProduct(productToErase, qt.getQuantity());
 						oRepo.save(newOrder);
 
 						if(orderProduct.getQuantity() == 0) {

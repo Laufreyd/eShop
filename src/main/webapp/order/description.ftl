@@ -7,7 +7,10 @@
 		<#if (orderProduct.quantity > 0)>
 		<a href="/product/${orderProduct.getProduct().id}">${orderProduct.getProduct().name}</a>
 		<#if (orderProduct.getOrder().finished?c) == "false">
-			<button><a href="/order/remove/${orderProduct.id}">Erase</a></button>
+			<form action="/order/remove/${orderProduct.getProduct().id}" method="post">
+				<input type="number" required value="0" name="quantity" min="0" max="${orderProduct.quantity}">
+				<input type="submit" value="Erase"></input>
+			</form>
 		</#if>
 		</#if>
 	</#list>
