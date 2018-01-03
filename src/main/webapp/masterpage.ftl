@@ -6,6 +6,7 @@
     <title>${title?html}</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/assets/style.css">
     <link rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
       integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
@@ -48,7 +49,7 @@
             </div>
           </li>
         </ul> -->
-        <div>
+        <div class="nav justify-content-end">
         	<#if (account)??>
         		Bienvenue <a href="/user/profil">${account.firstName}</a>
         		<button><a href="/user/disconnexion">Deconnexion</a></button>

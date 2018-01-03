@@ -21,9 +21,5 @@
     	Be connect to be able to buy this article
     </#if>
     
-    <#if (order)??>
-    	<p>${order.id}</p>
-    </#if>
-    
   </div>
 </@mp.page>
