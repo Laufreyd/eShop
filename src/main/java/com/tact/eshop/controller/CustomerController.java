@@ -24,9 +24,14 @@ public class CustomerController {
 	private CustomerRepository cRepo;
 	
 	@RequestMapping("profil")
-	public String profil() {
+	public String profil(HttpSession session) {
 		
-		return "/user/profil";
+		String returnString = "/user/profil";
+		
+		if(session.getAttribute("account") == null) {
+			returnString = "redirect:/user/connexion";
+		}
+		return returnString;
 	}
 	
 	@RequestMapping("connexion")
