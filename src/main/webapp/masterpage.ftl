@@ -17,47 +17,27 @@
 
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark <!--fixed-top-->">
-      <a class="navbar-brand" href="/">E-Shopping</a>
-      <!-- <button class="navbar-toggler" type="button" data-toggle="collapse"
-        data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">
-              Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://example.com"
-              id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">Dropdown</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-        </ul> -->
-        <div class="nav justify-content-end">
-        	<#if (account)??>
-        		Bienvenue <a href="/user/profil">${account.firstName}</a>
-        		<button><a href="/user/disconnexion">Deconnexion</a></button>
-        	<#else>
-        		<button><a href="/user/connexion">Connexion</a></button>
-        	</#if>
+      <div class="container"><div class="row myRow">
+	      <a class="col navbar-brand" href="/">E-Shopping</a>
+	        <div class="col-md-4 offset-md-3 customerOption">
+	        	<#if (account)??>
+	        		<span class="navWriten">Bienvenue </span>
+	        		<div class="dropdown myDropDown">
+					  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					    ${account.firstName}
+					  </button>
+					  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					    <a class="dropdown-item" href="/user/profil">Profil</a>
+					    <a class="dropdown-item" href="/order/list">My orders</a>
+					    <a class="dropdown-item bg-danger text-light" href="/user/disconnexion">Deconnexion</a>
+					  </div>
+					</div>
+	        	<#else>
+	        		<a href="/user/connexion"><button class="btn btn-light">Connexion</button></a>
+	        	</#if>
+	        </div>
+	        </div>
         </div>
-      <!-- </div> -->
     </nav>
 
     <main role="main" class="container">

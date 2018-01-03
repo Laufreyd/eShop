@@ -1,28 +1,46 @@
 <#import "../masterpage.ftl" as mp />
 <@mp.page title="Show list">
 
-  <div class="row" style="display:block;">
     <h1>Product Description '${product.name}'</h1>
-    <p>
-    <#if (product.description)??>
-    	${product.description}
-    <#else>
-    	'No description for this product'
-    </#if>
-    </p>
-    <p>${product.price}</p>
-    <p>${product.quantity} left</p>
     
-    <#if (product.quantity) == 0>
-    	Sorry, you  can't add this product to chart (Out of stock)
+    
+    <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Informations</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Description</th>
+      <td>
+      	<#if (product.description)??>
+    		${product.description}
+    	<#else>
+    		<span style="font-style:italic;">No description for this product</span>
+    	</#if>
+    	</td>
+    </tr>
+    <tr>
+      <th scope="row">Price</th>
+      <td>${product.price}</td>
+    </tr>
+    <tr>
+      <th scope="row">Quantity left</th>
+      <td>${product.quantity}</td>
+    </tr>
+  </tbody>
+</table>
+
+<#if (product.quantity) == 0>
+    	<p class="sentenceToRight"><span>Sorry, you  can't add this product to chart (Out of stock)</span></p>
     <#elseif (account)??>
-    	<form action="/order/add/${product.id}" method="post">
+    	<form action="/order/add/${product.id}" method="post" class="sentenceToRight">
     		<input type="number" required name="quantity" value="1" min="0" max="${product.quantity}">
-    		<input type="submit" value="Add to chart"></input>
+    		<input class="btn btn-primary" type="submit" value="Add to chart"></input>
     	</form>
     <#else>
-    	Be connect to be able to buy this article
+    	<p class="sentenceToRight"><span>Be connect to be able to buy this article</span></p>
     </#if>
-    
-  </div>
 </@mp.page>

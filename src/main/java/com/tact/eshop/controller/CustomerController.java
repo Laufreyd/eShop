@@ -76,6 +76,32 @@ public class CustomerController {
 		}
 	}
 	
+	@PostMapping("inscription")
+	public String inscription(Customer customer, HttpSession session, Model model) {
+		String returnString;
+		
+		List<Customer> customerList = cRepo.findByLastName(customer.getLastName());
+		ArrayList<Customer> customerFocused = new ArrayList<Customer>();
+		
+		for(Customer customerInList : customerList) {
+			if(customerInList.getFirstName().equals(customer.getFirstName())) {
+				customerFocused.add(customerInList);
+			}
+		}
+		
+		if(customerFocused.isEmpty()) {
+			cRepo.save(customer);
+			session.setAttribute("account", customer);
+			returnString = "/user/profil";
+		}
+		else {
+			model.addAttribute("error", "Someone with this name is already on this website");
+			returnString = "/user/connexion";
+		}
+		
+		return returnString;
+	}
+	
 	@PostMapping("modification")
 	public String modification(Customer customer, HttpSession session) {
 		Customer newCustomer = (Customer) session.getAttribute("account");

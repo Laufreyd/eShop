@@ -207,6 +207,7 @@ public class OrderController {
 			}
 			
 			if(session.getAttribute("currentOrder") != null) {
+				
 				Order newOrder = (Order) session.getAttribute("currentOrder");
 
 				Product productToErase = pRepo.findOne(Long.valueOf(opRepo.findOne(Long.valueOf(id)).getProduct().getId()));
@@ -234,6 +235,23 @@ public class OrderController {
 			}
 		}
 		return returnString;
+	}
+	
+	@RequestMapping("finished")
+	public String finishAnOrder(HttpSession session) {
+		
+		if(session.getAttribute("currentOrder") != null) {
+			Order currentOrder = (Order)session.getAttribute("currentOrder");
+			Order orderToFinish = oRepo.findOne(currentOrder.getId());
+			
+			orderToFinish.setFinished(true);
+			
+			oRepo.save(orderToFinish);
+			
+			session.setAttribute("currentOrder", null);
+		}
+		
+		return "redirect:/order/list";
 	}
 
 }

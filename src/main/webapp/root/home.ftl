@@ -2,10 +2,14 @@
 <@mp.page title="Show list">
 
   <div class="row">
-    <h1>Last Products</h1>
+    <h1 class="titlePages">Last Products</h1>
     <#list lastProducts as lastProduct>
-    	<a href="/product/${lastProduct.id}">${lastProduct.name}</a>
+    	<div class="col homeLink">
+    		<a href="/product/${lastProduct.id}">${lastProduct.name}</a>
+    	</div>
     </#list>
-    <a href="/product/index">See all the products</a>
+    <div class="col-12 homeLink">
+    	<a href="/product/index">See all the products</a>
+    </div>
   </div>
 </@mp.page>

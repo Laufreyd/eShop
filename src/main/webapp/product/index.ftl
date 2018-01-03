@@ -19,8 +19,8 @@
       <tbody>
       <#list products as product>
       	<#if (product.endOfLife?c) == "false">
-	      <tr>
-	        <th scope="row"><a href="/product/${product.id}">${product.name}</a></th>
+	      <tr class="clickableRowTable" onclick="document.location='/product/${product.id}'">
+	        <th scope="row">${product.name}</th>
 	        <td>${product.quantity}</td>
 	        <td>${product.price}</td>
 	      </tr>
