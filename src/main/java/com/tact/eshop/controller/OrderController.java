@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.tact.eshop.Application;
 import com.tact.eshop.entity.Customer;
@@ -92,8 +93,8 @@ public class OrderController {
 		return returnString;
 	}
 	
-	@RequestMapping("add/{id}")
-	public String addProductToChart(@PathVariable String id, HttpSession session, Model model) {
+	@PostMapping("add/{id}")
+	public String addProductToChart(OrderProduct qt, @PathVariable String id, HttpSession session, Model model) {
 		
 		String returnString = "redirect:/product/{id}";
 		
@@ -134,18 +135,19 @@ public class OrderController {
 			
 			if(session.getAttribute("currentOrder") != null) {
 				Product productToAdd = pRepo.findOne(Long.valueOf(id));
+				Integer quantity = qt.getQuantity();
 				
 				if(productToAdd.getEndOfLife() == false && productToAdd.getQuantity() > 0) {					
 					Order newOrder = (Order) session.getAttribute("currentOrder");
 					
 					Boolean check = false;
 					OrderProduct newOrderProduct = new OrderProduct(newOrder, productToAdd, 1);
-					
+
 					for(OrderProduct orderProduct : newOrder.getOrderedProduct()) {
 						if(orderProduct.getProduct().getId() == productToAdd.getId()) {
-							orderProduct.setQuantity(orderProduct.getQuantity() + 1);
-							productToAdd.setQuantity(productToAdd.getQuantity() - 1);
-							newOrder.setTotal(newOrder.getTotal() + productToAdd.getPrice());
+							orderProduct.setQuantity(orderProduct.getQuantity() + quantity);
+							productToAdd.setQuantity(productToAdd.getQuantity() - quantity);
+							newOrder.setTotal(newOrder.getTotal() + (productToAdd.getPrice() * quantity));
 							check = true;
 							opRepo.save(orderProduct);
 							oRepo.save(newOrder);

@@ -16,7 +16,10 @@
     <#if (product.quantity) == 0>
     	Sorry, you  can't add this product to chart (Out of stock)
     <#elseif (account)??>
-    	<button><a href="/order/add/${product.id}">Add to chart</a></button>
+    	<form action="/order/add/${product.id}" method="post">
+    		<input type="number" required name="quantity" value="1" min="0" max="${product.quantity}">
+    		<input type="submit" value="Add to chart"></input>
+    	</form>
     <#else>
     	Be connect to be able to buy this article
     </#if>
