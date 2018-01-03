@@ -168,9 +168,10 @@ public class OrderController {
 		return returnString;
 	}
 	
-	@PostMapping("remove/{id}")
-	public String removeProductToChart(OrderProduct qt, @PathVariable String id, HttpSession session, Model model) {
+	@PostMapping("remove/{idOrder}/{idProduct}")
+	public String removeProductToChart(OrderProduct qt, @PathVariable String idOrder, @PathVariable String idProduct, HttpSession session, Model model) {
 		String returnString = "redirect:/order/list";
+
 		if(session.getAttribute("account") != null) {
 			
 			Customer currentCustomer = (Customer) session.getAttribute("account");
@@ -207,10 +208,9 @@ public class OrderController {
 			}
 			
 			if(session.getAttribute("currentOrder") != null) {
-				
 				Order newOrder = (Order) session.getAttribute("currentOrder");
 
-				Product productToErase = pRepo.findOne(Long.valueOf(opRepo.findOne(Long.valueOf(id)).getProduct().getId()));
+				Product productToErase = pRepo.findOne(Long.valueOf(opRepo.findOne(Long.valueOf(idProduct)).getProduct().getId()));
 				
 				for(OrderProduct orderProduct : newOrder.getOrderedProduct()) {
 					if(orderProduct.getProduct().getId() == productToErase.getId()) {
@@ -226,6 +226,8 @@ public class OrderController {
 							session.setAttribute("currentOrder", null);
 						}
 						else {
+							returnString = "redirect:/order/{idOrder}";
+							
 							opRepo.save(orderProduct);
 						}
 

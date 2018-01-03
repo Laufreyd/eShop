@@ -18,14 +18,14 @@
 	  </thead>
 	  <tbody>
 	  	<#list order.getOrderedProduct() as orderProduct>
-	   	 	<tr class="clickableRowTable" onclick="document.location='/product/${orderProduct.getProduct().id}'">
+	   	 	<tr>
 	    	  <th scope="row">#</th>
-	    	  <td>${orderProduct.getProduct().name}</td>
+	    	  <td class="clickableRowTable" onclick="document.location='/product/${orderProduct.getProduct().id}'">${orderProduct.getProduct().name}</td>
 	    	  <td>${orderProduct.getProduct().price}</td>
 	    	  <td>${orderProduct.quantity}</td>
 	    	  <td>${orderProduct.quantity * orderProduct.getProduct().price}</td>
 	    	  <#if (orderProduct.getOrder().finished?c) == "false">
-					<td><form action="/order/remove/${orderProduct.id}" method="post">
+					<td><form action="/order/remove/${order.id}/${orderProduct.id}" method="post">
 						<input type="number" required value="0" name="quantity" min="0" max="${orderProduct.quantity}">
 						<input class="btn btn-danger" type="submit" value="Erase"></input>
 					</form></td>
